@@ -6,7 +6,9 @@ defmodule Rumbl.User do
     field :username, :string
     field :password, :string, virtual: true
     field :password_hash, :string
-    timestamps
+    has_many :videos, Rumbl.Video
+
+    timestamps()
   end
 
   def changeset(model, params \\ %{}) do # passing :empty as params is deprecated
