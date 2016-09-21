@@ -1,5 +1,6 @@
 defmodule Rumbl.Auth do
   import Plug.Conn
+  import Comeonin.Bcrypt, only: [checkpw: 2, dummy_checkpw: 0]
 
   def init(opts) do
     Keyword.fetch!(opts, :repo)
@@ -20,5 +21,27 @@ defmodule Rumbl.Auth do
     |> assign(:current_user, user)
     |> put_session(:user_id, user.id)
     |> configure_session(renew: true)
+  end
+
+  def login_by_username_and_pass(conn, username, given_pass, opts) do
+    repo = Keyword.fetch!(opts, :repo)
+    user = repo.get_by(Rumbl.User, username: username)
+
+    cond do
+      user && checkpw(given_pass, user.password_hash) ->
+        {:ok, login(conn, user)}
+      user ->
+        {:error, :unauthorized, conn}
+      true ->
+        dummy_checkpw() #simulate password check with variable timing
+        {:error, :not_found, conn}
+    end
+  end
+
+  def logout(conn) do
+    configure_session(conn, drop: true)
+    # drops whole session at the end of request
+    # keep session but delete user_id
+    # delete_session(conn, :user_id)
   end
 end
