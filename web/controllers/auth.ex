@@ -12,10 +12,15 @@ defmodule Rumbl.Auth do
   def call(conn, repo) do
     # check if user_id is in session
     user_id = get_session(conn, :user_id)
-    user = user_id && repo.get(Rumbl.User, user_id)
-    # store user or nil in conn
-    # so :current_user always available in conn
-    assign(conn, :current_user, user)
+    cond do
+      # if current_user already there, return conn as it is
+      user = conn.assigns[:current_user] -> conn
+      # if no current_user, get from session user_id
+      user = user_id && repo.get(Rumbl.User, user_id) ->
+        assign(conn, :current_user, user)
+      true ->
+        assign(conn, :current_user, nil)
+    end
   end
 
   def login(conn, user) do
