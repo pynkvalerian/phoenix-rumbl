@@ -15,6 +15,7 @@ html lang="en"
         ol.breadcrumb.text-right
           = if @current_user do
             li = @current_user.username
+            li = link "My Videos", to: video_path(@conn, :index)
             li = link "Log out", to: session_path(@conn, :delete, @current_user), method: "delete"
           - else
             li = link "Register", to: user_path(@conn, :new)

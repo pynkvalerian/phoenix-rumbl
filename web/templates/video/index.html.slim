@@ -16,7 +16,7 @@ table.table
         td= video.title
         td= video.description
         td class="text-right"
-          = link "Show", to: video_path(@conn, :show, video), class: "btn btn-default btn-xs"
+          = link "Show", to: watch_path(@conn, :show, video), class: "btn btn-default btn-xs"
           | &nbsp;
           = link "Edit", to: video_path(@conn, :edit, video), class: "btn btn-default btn-xs"
           | &nbsp;
