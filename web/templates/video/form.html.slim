@@ -15,4 +15,7 @@
     = textarea f, :description, class: "form-control"
     = error_tag f, :description
   .form-group
+    = label f, :category_id, "Category", class: "control-label"
+    = select f, :category_id, @categories, class: "form-control", prompt: "Choose a category"
+  .form-group
     = submit "Submit", class: "btn btn-primary"
