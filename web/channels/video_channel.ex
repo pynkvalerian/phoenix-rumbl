@@ -9,6 +9,19 @@ defmodule Rumbl.VideoChannel do
     {:ok, socket}
   end
 
+  # handle new_annotation events pushed from client
+  def handle_in("new_annotation", params, socket) do
+    # then broadcast this event to all clients on this topic
+    # 3 args: socket, event_name, payload
+    broadcast! socket, "new_annotation", %{
+      user: %{username: "anon"},
+      body: params["body"],
+      at: params["at"]
+    }
+
+    {:reply, :ok, socket}
+  end
+
   # callback invoked whenever msg reaches the channel
   # essentially a loop
   def handle_info(:ping, socket) do
