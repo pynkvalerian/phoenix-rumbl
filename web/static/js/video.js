@@ -35,7 +35,7 @@ let Video = {
     })
 
     // receive message
-    vidChannel.on("ping", ({count}) => console.log("PING", count))
+    // vidChannel.on("ping", ({count}) => console.log("PING", count))
 
     vidChannel.on("new_annotation", (resp) => {
       this.renderAnnotation(msgContainer, resp)
