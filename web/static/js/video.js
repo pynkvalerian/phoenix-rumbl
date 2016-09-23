@@ -20,7 +20,8 @@ let Video = {
     // connect to phoenix videoChannel
     // give it a topic: videos:<videoId>
     let vidChannel = socket.channel("videos:" + videoId)
-    // TODO join vidchannel
+
+    // join vidchannel
     vidChannel.join()
       .receive("ok", resp =>
         console.log("joined the video channel", resp)
@@ -28,6 +29,9 @@ let Video = {
       .receive("error", reason =>
         console.log("join failed", reason)
       )
+
+    // receive message
+    vidChannel.on("ping", ({count}) => console.log("PING", count))
   }
 }
 
