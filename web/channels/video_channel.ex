@@ -5,7 +5,19 @@ defmodule Rumbl.VideoChannel do
   # socket.assigns (typically a map)
 
   def join("videos:" <> video_id, _params, socket) do
-    {:ok, assign(socket, :video_id, String.to_integer(video_id))}
+    video_id = String.to_integer(video_id)
+    video = Repo.get!(Rumbl.Video, video_id)
+
+    annotations = Repo.all(
+      from a in assoc(video, :annotations),
+      order_by: [asc: a.at, asc: a.id],
+      limit: 200,
+      preload: [:user]
+    )
+
+    resp = %{annotations: Phoenix.View.render_many(annotations, Rumbl.AnnotationView, "annotation.json")}
+
+    {:ok, resp, assign(socket, :video_id, video_id)}
   end
 
   # make sure all incoming events have current_user
