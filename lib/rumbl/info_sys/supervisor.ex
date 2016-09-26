@@ -12,6 +12,6 @@ defmodule Rumbl.InfoSys.Supervisor do
     ]
 
     # supervise these children stated above
-    supervise children, startegy: :simple_one_for_one
+    supervise children, strategy: :simple_one_for_one
   end
 end
