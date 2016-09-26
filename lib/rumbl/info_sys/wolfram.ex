@@ -1,3 +1,4 @@
+require IEx
 defmodule Rumbl.InfoSys.Wolfram do
   import SweetXml
   alias Rumbl.InfoSys.Result
@@ -24,7 +25,7 @@ defmodule Rumbl.InfoSys.Wolfram do
   defp send_results(answer, query_ref, owner) do
     # send results back to requester (owner)
     results = [%Result{backend: "wolfram", score: 95, text: to_string(answer)}]
-    send(owner, {:result, query_ref, results})
+    send(owner, {:results, query_ref, results})
   end
 
   defp fetch_xml(query_str) do

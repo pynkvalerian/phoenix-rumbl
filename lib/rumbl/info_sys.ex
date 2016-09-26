@@ -1,4 +1,5 @@
 # proxy, see Programming Phoenix pg 630
+require IEx
 
 defmodule Rumbl.InfoSys do
   @backends [Rumbl.InfoSys.Wolfram]
@@ -14,12 +15,13 @@ defmodule Rumbl.InfoSys do
   def compute(query, opts \\ []) do
     limit = opts[:limit] || 10
     backends = opts[:backends] || @backends
-
-    backends
-    |> Enum.map(&spawn_query(&1, query, limit))
-    |> await_results(opts)
-    |> Enum.sort(&(&1.score >= &2.score))
-    |> Enum.take(limit)
+    answer =
+      backends
+      |> Enum.map(&spawn_query(&1, query, limit))
+      |> await_results(opts)
+      |> Enum.sort(&(&1.score >= &2.score))
+      |> Enum.take(limit)
+    answer
   end
 
   defp spawn_query(backend, query, limit) do
@@ -30,8 +32,8 @@ defmodule Rumbl.InfoSys do
     {pid, monitor_ref, query_ref}
   end
 
-  defp await_results(children, _opts) do
-    timout = opts[:timeout] || 5000
+  defp await_results(children, opts) do
+    timeout = opts[:timeout] || 5000
     timer = Process.send_after(self(), :timedout, timeout)
 
     results = await_result(children, [], :infinity)
