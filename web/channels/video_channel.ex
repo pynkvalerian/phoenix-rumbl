@@ -63,7 +63,7 @@ defmodule Rumbl.VideoChannel do
 
   defp compute_additional_info(ann, socket) do
     # get ONE result only
-    for result <- Rumbl.InfoSys.compute(ann.body, limit: 1, timeout: 10_000) do
+    for result <- InfoSys.compute(ann.body, limit: 1, timeout: 10_000) do
       attrs = %{url: result.url, body: result.text, at: ann.at}
       # associate result as annotation with backend user
       info_changeset =

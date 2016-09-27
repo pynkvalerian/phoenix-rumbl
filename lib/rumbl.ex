@@ -13,8 +13,6 @@ defmodule Rumbl do
       # Start the endpoint when the application starts
       supervisor(Rumbl.Endpoint, []),
       # Start your own worker by calling: Rumbl.Worker.start_link(arg1, arg2, arg3)
-      supervisor(Rumbl.InfoSys.Supervisor, []),
-      worker(Rumbl.Counter, [5]),
     ]
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html
